@@ -13,8 +13,8 @@ def album_list_read_create(request):
 
     if request.method == 'GET':
         albums = Album.objects.all()
-        serializers = AlbumSerializer(albums, many = True)
-        return Response(serializers.data)
+        serializer = AlbumSerializer(albums, many = True)
+        return Response(serializer.data)
     
     if request.method == 'POST':
         serializer = AlbumSerializer(data = request.data)
@@ -23,7 +23,7 @@ def album_list_read_create(request):
             return Response(serializer.data)
 
 @api_view(['GET', 'PATCH', 'DELETE'])
-def album_read_update_delete(request, album_id):
+def album_detail_update_delete(request, album_id):
     album = get_object_or_404(Album, pk = album_id)
 
     if request.method == 'GET':
@@ -49,8 +49,8 @@ def track_read_create(request, album_id):
 
     if request.method == 'GET':
         tracks = Track.objects.filter(album = album)
-        serializers = TrackSerializer(tracks, many = True)
-        return Response(serializers.data)
+        serializer = TrackSerializer(tracks, many = True)
+        return Response(serializer.data)
     
     elif request.method == 'POST':
         serializer = TrackSerializer(data = request.data)
@@ -59,7 +59,7 @@ def track_read_create(request, album_id):
         return Response(serializer.data)
     
 @api_view(['GET', 'PATCH', 'DELETE'])
-def track_read_update_delete(request, track_id):
+def track_detail_update_delete(request, track_id):
     track = get_object_or_404(Track, pk = track_id)
 
     if request.method == 'GET':
