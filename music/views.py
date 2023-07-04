@@ -57,3 +57,24 @@ def track_read_create(request, album_id):
         if serializer.is_valid():
             serializer.save(album = album)
         return Response(serializer.data)
+    
+@api_view(['GET', 'PATCH', 'DELETE'])
+def track_read_update_delete(request, track_id):
+    track = get_object_or_404(Track, pk = track_id)
+
+    if request.method == 'GET':
+        serializer = TrackSerializer(track)
+        return Response(serializer.data)
+    
+    elif request.method == 'PATCH':
+        serializer = TrackSerializer(instance = track, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+    elif request.method == 'DELETE':
+        track.delete()
+        data = {
+            'deleted_album' : track_id,
+        }
+        return Response(data)
