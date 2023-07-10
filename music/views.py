@@ -121,11 +121,16 @@ def track_detail_update_delete(request, track_id):
         }
         return Response(data)
     
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def find_tag(request, tag_name):
     f_tag = get_object_or_404(Tag, name = tag_name)
 
     if request.method == 'GET':
+        album = Album.objects.filter(tag__in = [f_tag])
+        serializer = AlbumSerializer(album, many = True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
         album = Album.objects.filter(tag__in = [f_tag])
         serializer = AlbumSerializer(album, many = True)
         return Response(serializer.data)
